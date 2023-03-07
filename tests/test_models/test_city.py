@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from datetime import datetime
 from models import *
 import os
