@@ -458,4 +458,4 @@ class TestCountGet(unittest.TestCase):
         self.assertEqual(expected, count_all)
 
 if __name__ == '__main__':
-    unittest.
+    unittest.main()
