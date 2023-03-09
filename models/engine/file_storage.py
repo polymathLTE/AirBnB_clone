@@ -15,7 +15,7 @@ class FileStorage:
 
     def new(self, obj):
         """sets in '__objects the obj with key '<obj class name>.id"""
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = str(obj)
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.to_dict()
 
     def all(self):
         """returns the dictionary '__objects"""
@@ -24,8 +24,9 @@ class FileStorage:
     def save(self):
         posh = dict(self.__objects)
         """serializes __objects to the JSON file (path: __file_path)"""
-        with open(self.__file_path, 'w', encoding='utf-8') as doc:
+        with open(self.__file_path, 'a', encoding='utf-8') as doc:
             json.dump(self.__objects, doc)
+            doc.write('\n') # remove before prod.
 
     def reload(self):
         """deserializes the JSON file to __objects (only if the JSON file (__file_path) exists;
@@ -36,7 +37,7 @@ class FileStorage:
             if pt.exists(self.__file_path):
                 with open(self.__file_path, 'r', encoding='utf-8') as doc:
                     dictobj = json.load(doc)
-                    print(dictobj)
+                    self.__objects = dictobj
                     
         except FileNotFoundError:
             return
