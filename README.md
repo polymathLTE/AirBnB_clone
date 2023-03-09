@@ -1,8 +1,8 @@
 ## 0x00. AirBnB clone - The console
 
 #### Write a README.md:
-> description of the project
-> description of the command interpreter:
+> This is the AirBnB clone project for ALX students
+> Python command interpreter is used:
 >> how to start it
 >> how to use it
 
