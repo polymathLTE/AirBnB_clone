@@ -11,18 +11,20 @@ class HBNBCommand(cmd.Cmd):
         """this stops and exits the program"""
         return True
 
-    def do_help(self, arg, *args):
+    def do_help(self, *args):
         """displays short tutorial"""
-        h_info = "Documented commands (type help <topic>):\n========================================\nEOF\t\thelp\t\tquit"
+        h_list = ['quit', 'help'] # please update with necessary help topics
+        h_info = f"Documented commands (type help <topic>):\n========================================\n{h_list}"
         h_quit = "This stops and exits the program"
-        # work in progress, please review
-        print(args)
-        if len(args) < 1 or len(args) > 2:
-            print(f'[Usage]: help\nhelp <command>\nsee commands list below\n{h_info}')
-        if len(args) == 0:
+
+        h_topics = {'quit': h_quit, 'help': h_info} # please uodate with necessary help topics
+
+        if args[0] == "":
             print(h_info)
-        elif args[0] == 'quit':
-            print(h_quit)
+        elif args[0] not in h_topics.keys():
+            print(f"No help for requested topic\n{h_info}")
+        else:
+            print(h_topics.get(args[0]))
 
     def do_EOF(self, arg):
         """implements the EOF scenario"""
@@ -30,11 +32,11 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, *args):
-        classes = ['BaseModel()', 'mo']
-        if len(args) <= 0:
+        classes = {'BaseModel': BaseModel()}
+        if args[0] == "":
             print("** class name missing **")
-        if args[0] in classes:
-            s = BaseModel()
+        elif args[0] in classes.keys():
+            s = classes.get(args[0])
             print(s.id)
         else:
             print("** class doesn't exist **")
