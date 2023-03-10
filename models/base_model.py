@@ -14,9 +14,10 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """This initializes a BaseModel instance on create/update"""
+        tm_format = '%Y-%m-%dT%H:%M:%S.%f'
         if len(kwargs) != 0:
-            kwargs['created_at'] = datetime.strptime(kwargs.get('created_at'), '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['updated_at'] = datetime.strptime(kwargs.get('updated_at'), '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs.get('created_at'), tm_format)
+            kwargs['updated_at'] = datetime.strptime(kwargs.get('updated_at'), tm_format)
             for k, v in kwargs.items():
                 if k != "__class__":
                     setattr(self, k, v)
@@ -38,7 +39,7 @@ class BaseModel:
     def to_dict(self):
         """returns a dictionary containing all keys/values of __dict__ of the instance"""
         cls_dict = dict(self.__dict__)
-        cls_dict.update({'__class__':type(self).__name__})
+        cls_dict.update({'__class__':self.__class__.__name__})
         cls_dict['created_at'] = datetime.isoformat(cls_dict.get('created_at'))
         cls_dict['updated_at'] = datetime.isoformat(cls_dict.get('updated_at'))
         return cls_dict
