@@ -43,4 +43,3 @@ class BaseModel:
         cls_dict['created_at'] = datetime.isoformat(cls_dict.get('created_at'))
         cls_dict['updated_at'] = datetime.isoformat(cls_dict.get('updated_at'))
         return cls_dict
-                                                    
