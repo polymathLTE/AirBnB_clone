@@ -114,4 +114,4 @@ class TestStateInstances(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
-    unittest.
+    unittest.main()
