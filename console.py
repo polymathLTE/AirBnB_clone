@@ -1,17 +1,28 @@
 #!/usr/bin/python3
 
 import cmd
-from models.base_model import BaseModel
 from models import storage
 import re
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+"""This is the console: the entry point of the AirBnB command line program"""
+
 
 class HBNBCommand(cmd.Cmd):
     """this defines the HBNB class which inherits from the base_model"""
     prompt = "(hbnb) "
     __classes = {
-        'BaseModel': BaseModel()
+        'BaseModel': BaseModel(),
+        'User': User(),
+        'State': State(),
+        'Amenity': Amenity(),
+        'Place': Place(),
+        'Review': Review()
     }
-    s = ''
 
     def do_quit(self, arg):
         """this stops and exits the program"""
@@ -44,9 +55,10 @@ class HBNBCommand(cmd.Cmd):
         if self.__is_class(argl):
             s = HBNBCommand.__classes.get(argl[0])
             print(s.id)
-            storage.save()
+            s.save()
 
     def do_show(self, arg):
+        storage.reload()
         argl = arg.split()
         if self.__is_class(argl):
             args = '.'.join(argl)
@@ -57,19 +69,21 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """destroys an given instance and saves the change to file"""
         argl = arg.split()
-        if self.__check_class(argl):
+        if self.__is_class(argl):
             args = '.'.join(argl)
             all_objs = storage.all()
             if self.__is_instance(argl, all_objs):
-                storage.all().pop(args)
+                all_objs.pop(args)
+                storage.save()
 
     def do_all(self, arg):
         """display the string representation of all instances"""
+        storage.reload()
         all_objs = storage.all()
         argl = arg.split()
         if argl and self.__is_class(argl):
             for obj in all_objs.keys():
-                if re.search(f"^{arg[0]}*", obj): # refactor later; make into a function
+                if re.search(f"^{argl[0]}*", obj): # refactor later; make into a function
                     print(all_objs.get(obj))
         elif not argl:
             for obj in all_objs.keys():
@@ -85,10 +99,16 @@ class HBNBCommand(cmd.Cmd):
             all_objs = storage.all()
             if self.__is_instance(argl, all_objs):
                 args = '.'.join(argl[0:2])
-                obj = all_objs.get(args)
-                # eval(obj.argl[2] = argl[3])
-                setattr(obj, argl[2], argl[3])
-                storage.save()
+                if not len(argl) >= 3:
+                    print("** attribute name missing **")
+                    return
+                elif not len(argl) >= 4:
+                    print("** value missing **")
+                    return
+                elif self.__is_writable(argl[2]):
+                    obj = all_objs.get(args)
+                    setattr(obj, argl[2], argl[3])
+                    storage.save()
 
     def __is_class(self, arg):
         """returns True if a given class exists, else returns false"""
@@ -109,7 +129,16 @@ class HBNBCommand(cmd.Cmd):
             return True
         else:
             print("** no instance found **")
-        
+
+    def __is_writable(self, arg):
+        """returns True if a given attribute can be updated
+        Read-Only attributes: id, created_at, updated_at
+        """
+        ROA = ['id', 'created_at', 'updated_at']
+        if arg not in ROA:
+            return True
+        else:
+            print("** attribute name is READ-ONLY")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
