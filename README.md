@@ -2,10 +2,12 @@
 
 #### Write a README.md:
 > This is the AirBnB clone project for ALX students
-> Python command interpreter is used:
->> how to start it
->> how to use it
-
-- examples
-You should have an `AUTHORS` file at the root of your repository, listing all individuals having contributed content to the repository. For format, reference Docker’s `AUTHORS` page
-You should use branches and pull requests on GitHub - it will help you as team to organize your work
+> The technolocies used to build this project include
+> Python command interpreter, JSSON, UUID, 
+> One can start this project interactively by  ./console.py
+> or non-interactively 
+> This project can be used for rental services between a host and a guest 
+> gitbub was used as colloboration tool
+> the unittest module of python was used to build the following tests:
+> test_console.py, test_base_model.py, test_place.py, test_state.py, test_city.py
+> test_review.py, test_amenity.py
