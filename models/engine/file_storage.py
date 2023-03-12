@@ -8,7 +8,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models.city import City
-"""serializes instances to a JSON file and deserializes JSON file to instances for storage/recovery"""
+"""serializes/deserializes instances to/from a JSON(file)"""
 
 
 class FileStorage:
@@ -26,7 +26,7 @@ class FileStorage:
     def all(self):
         """returns the dictionary '__objects"""
         return self.__objects
-    
+
     def save(self):
         objtmp = self.__objects
         """serializes __objects to the JSON file (path: __file_path)"""
@@ -35,10 +35,11 @@ class FileStorage:
             json.dump(obj_dict, doc)
 
     def reload(self):
-        """deserializes the JSON file to __objects (only if the JSON file (__file_path) exists;
-        otherwise, do nothing. If the file doesn’t exist, no exception should be raised)
+        """deserializes the JSON file to __objects
+        (only if the JSON file (__file_path) exists;
+        otherwise, do nothing. If the file doesn’t exist,
+        no exception should be raised)
         """
-        # checks if file exists
         try:
             if pt.exists(self.__file_path):
                 with open(self.__file_path, 'r', encoding='utf-8') as doc:
@@ -47,6 +48,5 @@ class FileStorage:
                         class_name = v['__class__']
                         del v['__class__']
                         self.new(eval(class_name)(**v))
-                    
         except FileNotFoundError:
             return

@@ -30,16 +30,16 @@ class BaseModel:
     def __str__(self):
         """Returns a human readable representation of the class"""
         return f"[{type(self).__name__}] ({self.id}) {self.__dict__}"
-    
+
     def save(self):
-        """updates the public instance attribute 'updated_at' with the current datetime"""
+        """updates the attribute 'updated_at' with the current datetime"""
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
-        """returns a dictionary containing all keys/values of __dict__ of the instance"""
+        """returns a dictionary containing rephrased format of the instance"""
         cls_dict = dict(self.__dict__)
-        cls_dict.update({'__class__':self.__class__.__name__})
+        cls_dict.update({'__class__': self.__class__.__name__})
         cls_dict['created_at'] = datetime.isoformat(cls_dict.get('created_at'))
         cls_dict['updated_at'] = datetime.isoformat(cls_dict.get('updated_at'))
         return cls_dict
