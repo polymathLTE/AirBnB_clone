@@ -16,8 +16,10 @@ class BaseModel:
         """This initializes a BaseModel instance on create/update"""
         tm_format = '%Y-%m-%dT%H:%M:%S.%f'
         if len(kwargs) != 0:
-            kwargs['created_at'] = datetime.strptime(kwargs.get('created_at'), tm_format)
-            kwargs['updated_at'] = datetime.strptime(kwargs.get('updated_at'), tm_format)
+            kwargs['created_at'] = \
+                datetime.strptime(kwargs.get('created_at'), tm_format)
+            kwargs['updated_at'] = \
+                datetime.strptime(kwargs.get('updated_at'), tm_format)
             for k, v in kwargs.items():
                 if k != "__class__":
                     setattr(self, k, v)
