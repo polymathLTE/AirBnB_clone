@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 import json
-from models.base_model import BaseModel
 from os import path as pt
+from models.base_model import BaseModel
+from models.user import User
 """serializes instances to a JSON file and deserializes JSON file to instances for storage/recovery"""
 
 
