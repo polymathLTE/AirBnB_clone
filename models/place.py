@@ -4,11 +4,13 @@ from models.base_model import BaseModel
 from models.city import City
 from models.user import User
 from models.amenity import Amenity
+"""the Place class defines attributes of places the user subscribes"""
+
 
 class Place(BaseModel):
     """this defines the Place class"""
-    
-    city_id =""
+
+    city_id = ""
     user_id = ""
     name = ""
     description = ""
