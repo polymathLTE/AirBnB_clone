@@ -1,204 +1,249 @@
-from datetime import datetime
-from models import *
-# from models.place import PlaceAmenity
+#!/usr/bin/python3
+"""Defines unittests for models/place.py.
+
+Unittest classes:
+    TestPlace_instantiation
+    TestPlace_save
+    TestPlace_to_dict
+"""
 import os
+import models
 import unittest
+from datetime import datetime
+from time import sleep
+from models.place import Place
 
 
-class Test_PlaceModel(unittest.TestCase):
-    """
-    Test the place model class
-    """
+class TestPlace_instantiation(unittest.TestCase):
+    """Unittests for testing instantiation of the Place class."""
+
+    def test_no_args_instantiates(self):
+        self.assertEqual(Place, type(Place()))
+
+    def test_new_instance_stored_in_objects(self):
+        self.assertIn(Place(), models.storage.all().values())
+
+    def test_id_is_public_str(self):
+        self.assertEqual(str, type(Place().id))
+
+    def test_created_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(Place().created_at))
+
+    def test_updated_at_is_public_datetime(self):
+        self.assertEqual(datetime, type(Place().updated_at))
+
+    def test_city_id_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.city_id))
+        self.assertIn("city_id", dir(pl))
+        self.assertNotIn("city_id", pl.__dict__)
+
+    def test_user_id_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.user_id))
+        self.assertIn("user_id", dir(pl))
+        self.assertNotIn("user_id", pl.__dict__)
+
+    def test_name_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.name))
+        self.assertIn("name", dir(pl))
+        self.assertNotIn("name", pl.__dict__)
+
+    def test_description_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(str, type(Place.description))
+        self.assertIn("description", dir(pl))
+        self.assertNotIn("desctiption", pl.__dict__)
+
+    def test_number_rooms_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.number_rooms))
+        self.assertIn("number_rooms", dir(pl))
+        self.assertNotIn("number_rooms", pl.__dict__)
+
+    def test_number_bathrooms_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.number_bathrooms))
+        self.assertIn("number_bathrooms", dir(pl))
+        self.assertNotIn("number_bathrooms", pl.__dict__)
+
+    def test_max_guest_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.max_guest))
+        self.assertIn("max_guest", dir(pl))
+        self.assertNotIn("max_guest", pl.__dict__)
+
+    def test_price_by_night_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(int, type(Place.price_by_night))
+        self.assertIn("price_by_night", dir(pl))
+        self.assertNotIn("price_by_night", pl.__dict__)
+
+    def test_latitude_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(float, type(Place.latitude))
+        self.assertIn("latitude", dir(pl))
+        self.assertNotIn("latitude", pl.__dict__)
+
+    def test_longitude_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(float, type(Place.longitude))
+        self.assertIn("longitude", dir(pl))
+        self.assertNotIn("longitude", pl.__dict__)
+
+    def test_amenity_ids_is_public_class_attribute(self):
+        pl = Place()
+        self.assertEqual(list, type(Place.amenity_ids))
+        self.assertIn("amenity_ids", dir(pl))
+        self.assertNotIn("amenity_ids", pl.__dict__)
+
+    def test_two_places_unique_ids(self):
+        pl1 = Place()
+        pl2 = Place()
+        self.assertNotEqual(pl1.id, pl2.id)
+
+    def test_two_places_different_created_at(self):
+        pl1 = Place()
+        sleep(0.05)
+        pl2 = Place()
+        self.assertLess(pl1.created_at, pl2.created_at)
+
+    def test_two_places_different_updated_at(self):
+        pl1 = Place()
+        sleep(0.05)
+        pl2 = Place()
+        self.assertLess(pl1.updated_at, pl2.updated_at)
+
+    def test_str_representation(self):
+        dt = datetime.today()
+        dt_repr = repr(dt)
+        pl = Place()
+        pl.id = "123456"
+        pl.created_at = pl.updated_at = dt
+        plstr = pl.__str__()
+        self.assertIn("[Place] (123456)", plstr)
+        self.assertIn("'id': '123456'", plstr)
+        self.assertIn("'created_at': " + dt_repr, plstr)
+        self.assertIn("'updated_at': " + dt_repr, plstr)
+
+    def test_args_unused(self):
+        pl = Place(None)
+        self.assertNotIn(None, pl.__dict__.values())
+
+    def test_instantiation_with_kwargs(self):
+        dt = datetime.today()
+        dt_iso = dt.isoformat()
+        pl = Place(id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(pl.id, "345")
+        self.assertEqual(pl.created_at, dt)
+        self.assertEqual(pl.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            Place(id=None, created_at=None, updated_at=None)
+
+
+class TestPlace_save(unittest.TestCase):
+    """Unittests for testing save method of the Place class."""
+
     @classmethod
-    def setUpClass(cls):
-        """create necessary dependent objects"""
-        test_user = {'id': "001",
-                     'email': "you@g.com",
-                     'password': "1234",
-                     'first_name': "TEST",
-                     'last_name': "REVIEW"}
-        cls.user = User(test_user)
-        cls.user.save()
-        test_state = {'id': "002",
-                      'created_at': datetime(2017, 2, 12, 00, 31, 55, 331997),
-                      'name': "TEST STATE FOR CITY"}
-        cls.state = State(test_state)
-        cls.state.save()
-        test_city = {'id': "003",
-                     'name': "CITY SET UP",
-                     'state_id': "002"}
-        cls.city = City(test_city)
-        cls.city.save()
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
 
-    @classmethod
-    def tearDownClass(cls):
-        storage.delete(cls.state)
-        storage.delete(cls.user)
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
-    def test_simple_initialization(self):
-        """initialization without arguments"""
-        model = Place()
-        self.assertTrue(hasattr(model, "id"))
-        self.assertTrue(hasattr(model, "created_at"))
+    def test_one_save(self):
+        pl = Place()
+        sleep(0.05)
+        first_updated_at = pl.updated_at
+        pl.save()
+        self.assertLess(first_updated_at, pl.updated_at)
 
-    def test_var_initialization(self):
-        """Check default type"""
-        test_place = {'id': "003",
-                      'city_id': "003",
-                      'user_id': "001",
-                      'name': "TEST REVIEW",
-                      'description': "blah blah",
-                      'number_rooms': 4,
-                      'number_bathrooms': 2,
-                      'max_guest': 4,
-                      'price_by_night': 23,
-                      'latitude': 45.5,
-                      'longitude': 23.4}
-        model = Place(test_place)
-        self.assertEqual(model.id, test_place["id"])
-        self.assertEqual(model.city_id, test_place["city_id"])
-        self.assertEqual(model.user_id, test_place["user_id"])
-        self.assertEqual(model.name, test_place["name"])
-        self.assertEqual(model.description, test_place["description"])
-        self.assertEqual(model.number_rooms, test_place["number_rooms"])
-        self.assertEqual(model.number_bathrooms,
-                         test_place["number_bathrooms"])
-        self.assertEqual(model.max_guest, test_place["max_guest"])
-        self.assertEqual(model.price_by_night, test_place["price_by_night"])
-        self.assertEqual(model.latitude, test_place["latitude"])
-        self.assertEqual(model.longitude, test_place["longitude"])
+    def test_two_saves(self):
+        pl = Place()
+        sleep(0.05)
+        first_updated_at = pl.updated_at
+        pl.save()
+        second_updated_at = pl.updated_at
+        self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
+        pl.save()
+        self.assertLess(second_updated_at, pl.updated_at)
 
-    def test_date_format(self):
-        """test the date has the right type"""
-        model = Place()
-        self.assertIsInstance(model.created_at, datetime)
+    def test_save_with_arg(self):
+        pl = Place()
+        with self.assertRaises(TypeError):
+            pl.save(None)
 
-    def test_delete(self):
-        """test the deletion of a city"""
-        test_place = {'name': "test_1",
-                      'city_id': "003",
-                      'user_id': "001"
-                      }
-        model = Place(**test_place)
-        model.save()
-        self.assertIn(model.id, storage.all("Place").keys())
-        storage.delete(model)
-        self.assertIsNone(storage.get("Place", model.id))
-
-    def test_all_place(self):
-        """test querying all places"""
-        length = storage.count("Place")
-        test_place = {'city_id': "003",
-                      'user_id': "001"
-                      }
-        a = Place(**test_place)
-        a.name = "test_a"
-        b = Place(**test_place)
-        b.name = "test_b"
-        a.save()
-        b.save()
-        all_cities = storage.all("Place")
-        self.assertIn(a.id, all_cities.keys())
-        self.assertIn(b.id, all_cities.keys())
-        self.assertEqual(storage.count("Place"), length + 2)
-        storage.delete(a)
-        storage.delete(b)
-
-    def test_get_place(self):
-        """test getting an amenity"""
-        test_place = {'name': "test_get",
-                      'city_id': "003",
-                      'user_id': "001"
-                      }
-        a = Place(**test_place)
-        id_a = a.id
-        a.save()
-        res = storage.get("Place", id_a)
-        self.assertEqual(a.name, res.name)
-        self.assertEqual(a.created_at.year, res.created_at.year)
-        self.assertEqual(a.created_at.month, res.created_at.month)
-        self.assertEqual(a.created_at.day, res.created_at.day)
-        self.assertEqual(a.created_at.hour, res.created_at.hour)
-        self.assertEqual(a.created_at.minute, res.created_at.minute)
-        self.assertEqual(a.created_at.second, res.created_at.second)
-        storage.delete(a)
-
-    def test_save(self):
-        """saving the object to storage"""
-        test_args = {'id': "003",
-                     'city_id': "003",
-                     'user_id': "001",
-                     'name': "TEST REVIEW",
-                     'description': "blah blah",
-                     'number_rooms': 4,
-                     'number_bathrooms': 2,
-                     'max_guest': 4,
-                     'price_by_night': 23,
-                     'latitude': 45.5,
-                     'longitude': 23.4}
-        place = Place(**test_args)
-        place.save()
-        all_places = storage.all("Place")
-        self.assertIn(test_args['id'], all_places.keys())
-        obj = storage.get("Place", test_args['id'])
-        self.assertEqual(obj.name, test_args['name'])
-        self.assertEqual(obj.created_at.hour, place.created_at.hour)
-        storage.delete(place)
+    def test_save_updates_file(self):
+        pl = Place()
+        pl.save()
+        plid = "Place." + pl.id
+        with open("file.json", "r") as f:
+            self.assertIn(plid, f.read())
 
 
-# @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE', 'fs') != 'db', "db")
-# class Test_PlaceAmenityModel(unittest.TestCase):
-#     """
-#     Test the place amenity model class
-#     """
+class TestPlace_to_dict(unittest.TestCase):
+    """Unittests for testing to_dict method of the Place class."""
 
-#     def test_save(self):
-#         """creates and save a PlaceAmenity object"""
-#         test_user = {'id': "002",
-#                      'email': "you@g.com",
-#                      'password': "1234",
-#                      'first_name': "TEST",
-#                      'last_name': "REVIEW"}
-#         user = User(**test_user)
-#         test_state = {'id': "001",
-#                       'created_at': datetime(2017, 2, 12, 00,
-#                                              31, 55, 331997),
-#                       'name': "TEST STATE FOR CITY"}
-#         state = State(**test_state)
-#         test_city = {'id': "005",
-#                      'name': "CITY SET UP",
-#                      'state_id': "001"}
-#         city = City(**test_city)
-#         test_place = {'id': "002",
-#                       'city_id': "005",
-#                       'user_id': "002",
-#                       'name': "TEST REVIEW",
-#                       'description': "blah blah",
-#                       'number_rooms': 4,
-#                       'number_bathrooms': 2,
-#                       'max_guest': 4,
-#                       'price_by_night': 23,
-#                       'latitude': 45.5,
-#                       'longitude': 23.4}
-#         place = Place(**test_place)
-#         test_amenity = {'id': "010",
-#                         'name': "TEST place_amenities"}
-#         amenity = Amenity(**test_amenity)
-#         pla = PlaceAmenity(place_id="002", amenity_id="010")
-#         user.save()
-#         state.save()
-#         city.save()
-#         place.save()
-#         amenity.save()
-#         storage._DBStorage__session.add(pla)
-#         tmp = storage._DBStorage__session.query(PlaceAmenity).one()
-#         storage._DBStorage__session.delete(tmp)
-        # storage.delete(amenity) ???, foreign key constraint on empty set
-        # storage.delete(place)
-        # storage.delete(user)
-        # storage.delete(state)
+    def test_to_dict_type(self):
+        self.assertTrue(dict, type(Place().to_dict()))
+
+    def test_to_dict_contains_correct_keys(self):
+        pl = Place()
+        self.assertIn("id", pl.to_dict())
+        self.assertIn("created_at", pl.to_dict())
+        self.assertIn("updated_at", pl.to_dict())
+        self.assertIn("__class__", pl.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        pl = Place()
+        pl.middle_name = "Holberton"
+        pl.my_number = 98
+        self.assertEqual("Holberton", pl.middle_name)
+        self.assertIn("my_number", pl.to_dict())
+
+    def test_to_dict_datetime_attributes_are_strs(self):
+        pl = Place()
+        pl_dict = pl.to_dict()
+        self.assertEqual(str, type(pl_dict["id"]))
+        self.assertEqual(str, type(pl_dict["created_at"]))
+        self.assertEqual(str, type(pl_dict["updated_at"]))
+
+    def test_to_dict_output(self):
+        dt = datetime.today()
+        pl = Place()
+        pl.id = "123456"
+        pl.created_at = pl.updated_at = dt
+        tdict = {
+            'id': '123456',
+            '__class__': 'Place',
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat(),
+        }
+        self.assertDictEqual(pl.to_dict(), tdict)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        pl = Place()
+        self.assertNotEqual(pl.to_dict(), pl.__dict__)
+
+    def test_to_dict_with_arg(self):
+        pl = Place()
+        with self.assertRaises(TypeError):
+            pl.to_dict(None)
 
 
 if __name__ == "__main__":
     unittest.main()
-
