@@ -18,7 +18,7 @@ https://github.com/polymathLTE/AirBnB_clone.git
 
 ### HOW TO START
 > Navigate to `AirBnB_clone` directory
-> One can start this project interactively by running [console.py](./console)
+> One can start this project interactively by running [console.py](console)
 > or non-interactively
 
 * This project can be used for rental services between a host and a guest gitbub was used as colloboration tool
