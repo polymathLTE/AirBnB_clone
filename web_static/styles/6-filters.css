@@ -30,14 +30,16 @@ section.filters button:hover {
     width: 25%;
     float: left;
     border-right: 1px solid #DDDDDD;
-    margin-left: 30px;
+    padding-left: 30px;
+    position: relative;
 }
 
 .amenities {
     height: 100%;
     width: 25%;
     float: left;
-    margin-left: 30px;
+    padding-left: 30px;
+    position: relative;
 
 }
 
@@ -62,16 +64,23 @@ h4 {
     background-color: #FAFAFA;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
-    padding-bottom: 20px;
-    padding-right: 20px;
-    padding-left: 20px;
     display: none;
+    position: absolute;
+    left: 0;
+    width: 100%;
+}
+
+.popover li {
+    padding: 10px;
 }
 
 .locations:hover .popover {
     display: block;
 }
+
+.amenities:hover .popover {
+    display: block;
+}
 h2 {
-    margin-top: 20px;
     font-size: 16px;
 }
