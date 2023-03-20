@@ -1,4 +1,4 @@
-footer {
+/* footer {
     background-color: white;
     height: 60px;
     width: 100%;
@@ -9,4 +9,16 @@ footer {
 footer p {
     text-align: center;
     padding: 21px;
+} */
+
+footer {
+	background-color: white;
+    height: 60px;
+    width: 100%;
+    border-top: 1px solid #CCCCCC;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	bottom: 0;
 }
