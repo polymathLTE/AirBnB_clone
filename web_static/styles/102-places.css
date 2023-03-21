@@ -119,13 +119,6 @@
 
 /* Layout for Tablet/smaller screen devices */
 @media screen and (max-width: 1000px) {
-    
-    /* disable horizontal scrolling */
-    html, body {
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
     /* center the places heading */
     .place_title h1{
         text-align: center;

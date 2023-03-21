@@ -12,3 +12,13 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+/* layout for mobile screens */
+@media screen and (max-width: 1000px) {
+    html, body {
+        /* disable horizontal scrolling */
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+}
