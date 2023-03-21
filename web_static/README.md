@@ -1,7 +1,26 @@
 # 0x01. AirBnB clone - Web static
 
+## Background Context
+
+### Web static
+Now that you have a command interpreter for managing your AirBnB objects, it’s time to make them alive!
+
+Before developing a big and complex web application, we will build the front end step-by-step.
+
+#### The first step is to “design” / “sketch” / “prototype” each element:
+![](https://s3.amazonaws.com/intranet-projects-files/concepts/74/hbnb_step1.png)
+
+## Project Objectives
+The onjectives of the project are:
+
+* Create simple HTML static pages
+* Style guide
+* Fake contents
+* No Javascript
+* No data loaded from anything
+
 ## Learning Objectives:bulb:
-What you should learn from this project:
+What I learned from this project:
 
 * What is HTML
 * How to create an HTML page
@@ -17,7 +36,10 @@ What you should learn from this project:
 * How to compute CSS Specificity Value
 * What are Box properties in CSS
 
+
 ---
+
+## Table of Contents
 
 ### [0. Inline styling](./0-index.html)
 * Write an HTML page that displays a header and a footer.
