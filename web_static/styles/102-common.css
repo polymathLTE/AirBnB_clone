@@ -21,4 +21,10 @@
         overflow-x: hidden;
     }
 
+    .container {
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+    }
+
 }

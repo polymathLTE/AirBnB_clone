@@ -18,7 +18,6 @@ section.filters button {
     border-radius: 4px;
     margin-right: 30px;
     margin-top: 11px;
-    
 }
 
 section.filters button:hover {
@@ -26,15 +25,10 @@ section.filters button:hover {
 }
 
 .locations {
-    height: 100%;
-    width: 25%;
-    float: left;
     border-right: 1px solid #DDDDDD;
-    padding-left: 30px;
-    position: relative;
 }
 
-.amenities {
+.amenities, .locations {
     height: 100%;
     width: 25%;
     float: left;
@@ -68,6 +62,7 @@ h4 {
     position: absolute;
     left: 0;
     width: 100%;
+    z-index: 1;
 }
 
 .popover li {
@@ -83,4 +78,58 @@ h4 {
 }
 h2 {
     font-size: 16px;
+}
+
+/* Layout for tablet/smaller screen devices */
+@media screen and (max-width: 670px) {
+    section.filters {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        flex: 1;
+        padding: 5px;
+    }
+
+    .amenities, .locations {
+        height: 34%;
+        width: 100%;
+        position: relative;
+        text-align: center;
+        padding-left: 0;
+        border-bottom: 1px solid #DDDDDD;
+        /* display: none; */
+    }
+
+    section.filters button {
+        font-size: 15px;
+        background-color: #FF5A5F;
+        color: #FFFFFF;
+        height: 34px;
+        width: 20%;
+        border-radius: 4px;
+        margin: 5px 0;
+    }
+    /* section.filters button {
+        float: right;
+        font-size: 18px;
+        background-color: #FF5A5F;
+        color: #FFFFFF;
+        height: 48px;
+        width: 20%;
+        border: 0px;
+        border-radius: 4px;
+        margin-right: 30px;
+        margin-top: 11px;
+    } */
+    /* .filters.srch:hover .amenities {
+        display: block;
+    }
+    .srch:hover .locations {
+        display: block;
+    } */
+
+
+
 }
